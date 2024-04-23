@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/translation.css" />
+    <title>Translation</title>
+ </head>
+ <body>
+  <div>  <h1>Translate Your Phrases Here!</h1></div>
+    <div class="container">
+
+      <div class="card input-wrapper">
+        <div class="from">
+          <pre><b>       English</b></pre>
+        </div>
+        <div class="text-area">
+          <textarea
+            id="input-text"
+            cols="30"
+            rows="10"
+            placeholder="Enter your text here"
+          ></textarea>
+        </div>
+        <div class="buttons">
+           <button id="clear-all">Clear All</button>
+           <button id="translate">Translate</button>
+         </div>
+
+      </div>
+
+      <div class="card output-wrapper">
+        <div class="to">
+          <pre><b>       Bengali</b></pre>
+        </div>
+        <textarea
+          id="output-text"
+          cols="30"
+          rows="10"
+          placeholder="   Translated text will appear here"
+          disabled
+        ></textarea>
+      </div>
+    </div>
+ <script>
+ document.getElementById('translate').addEventListener('click', function() {
+    const inputText = document.getElementById('input-text').value;
+    if (!inputText) {
+        alert('Please enter text to translate.');
+        return;
+    }
+
+    fetch('/translation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'input_text': inputText
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            console.log(data.translated_text.length)
+            if(data.translated_text === "Explicit or bad words detected. Translation aborted. ") {
+                alert("Explicit or bad words detected.")
+            }
+            else {
+                document.getElementById('output-text').value = data.translated_text;
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+ document.getElementById('clear-all').addEventListener('click', function() {
+    document.getElementById('input-text').value = '';
+});
+ </script>
+
+ </body>
+</html>
