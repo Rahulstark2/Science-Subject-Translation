@@ -13,7 +13,7 @@ quantization = None
 
 app = Flask(__name__)
 
-# Replace the following with your MongoDB Atlas connection string
+
 app.config["SECRET_KEY"] = "1241f366ecf2af7cbf180a0bab94fbdea617358a"
 MONGO_URI = "mongodb+srv://admin:ScienceSubjectTranslation@cluster0.ydvb0ch.mongodb.net/ScienceSubjectTranslation?retryWrites=true&w=majority&appName=Cluster0"
 
@@ -42,15 +42,15 @@ def signupsubmit():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Check if user already exists
+
         existing_user = db.user_details.find_one({'email': email})
         if existing_user:
             return jsonify({'error': 'User already exists. Please sign in.'})
 
-        # Hash the password
+
         password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        # Store the hashed password in the database
+
         db.user_details.insert_one({'email': email, 'password': password_hash.decode('utf-8')})
         return jsonify({'success': 'User registered successfully.'})
 
@@ -123,7 +123,7 @@ def translation():
             return tokenizer, model
 
         def contains_explicit_words(sentence, bad_words_set):
-            # Tokenize the sentence into words using regex to handle punctuation
+
             words = re.findall(r'\b\w+\b', sentence.lower())
             for word in words:
                 if word in bad_words_set:
@@ -154,7 +154,7 @@ def translation():
 
             return translations
 
-        en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"  # ai4bharat/indictrans2-en-indic-dist-200M
+        en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"
         en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, "en-indic", quantization)
 
         ip = IndicProcessor(inference=True)
@@ -170,7 +170,7 @@ def translation():
         for input_sentence, translation in zip(en_sents, hi_translations):
             translated_text += translation + " "
 
-        # flush the models to free the GPU memory
+
         del en_indic_tokenizer, en_indic_model
 
         if 'email' in session:
@@ -182,8 +182,7 @@ def translation():
     else:
         return render_template('translation.html')
 
-# @app.route('/translationsubmit', methods=['GET','POST'])
-# def translationsubmit():
+
 
 
 

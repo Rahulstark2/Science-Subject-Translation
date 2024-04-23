@@ -100,31 +100,31 @@ button {
     color: red;
     font-size: 0.8em;
     margin-top: 5px;
-    opacity: 0; /* Initially hidden */
-    transition: opacity 1s ease-in-out; /* Transition effect */
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
 .error.show {
-    opacity: 1; /* Visible when the 'show' class is added */
+    opacity: 1;
 }
 
 #togglePassword {
-    position: absolute; /* Position the icon absolutely within the container */
-    margin-left: 340px; /* Adjust the position from the right edge of the container */
-    top: 60%; /* Center the icon vertically */
-    transform: translateY(-50%); /* Ensure the icon is centered vertically */
+    position: absolute;
+    margin-left: 340px;
+    top: 60%;
+    transform: translateY(-50%);
     cursor: pointer;
 }
 
 .password-container {
-    position: relative; /* This allows absolute positioning of the icon inside the container */
+    position: relative;
     width: 94%;
     margin-right: 30px;
-    cursor: pointer/* Match the width of the input field */
+    cursor: pointer
 }
 
 
 
 #password {
-    padding-right: 30px; /* Add padding to the right to make space for the icon */
+    padding-right: 30px;
 }

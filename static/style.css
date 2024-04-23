@@ -19,7 +19,7 @@ body {
 
 .logo img {
     height: 90px;
-    cursor: pointer/* Adjust the size as needed */
+    cursor: pointer;
 }
 
 .sign-in {
@@ -103,8 +103,8 @@ h1 {
     margin-right: 5px;
 }
 h1 span {
-    display: inline-block; /* Ensures each span is treated as a block element */
-    vertical-align: middle; /* Aligns the spans vertically */
+    display: inline-block;
+    vertical-align: middle;
 }
 .blue1 {
     color: #5168F6;
