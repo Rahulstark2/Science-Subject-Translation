@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, url_for, redirect
+from flask import Flask, render_template, request, jsonify, session, url_for, redirect,send_file,make_response
 from pymongo import MongoClient
 import certifi
 import torch
@@ -6,6 +6,9 @@ import re
 from transformers import AutoModelForSeq2SeqLM, BitsAndBytesConfig
 from IndicTransTokenizer import IndicProcessor, IndicTransTokenizer
 import bcrypt
+import pyautogui
+import img2pdf
+import os
 
 BATCH_SIZE = 4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -29,6 +32,8 @@ def index():
         return render_template('index2.html', email=email)
     else:
         return render_template('index.html')
+
+
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -143,7 +148,7 @@ def translation():
                                    return_attention_mask=True).to(DEVICE)
 
                 with torch.no_grad():
-                    generated_tokens = model.generate(**inputs, use_cache=True, min_length=0, max_length=256,
+                    generated_tokens = model.generate(**inputs, use_cache=True, min_length=0, max_length=1000,
                                                       num_beams=5, num_return_sequences=1)
 
                 generated_tokens = tokenizer.batch_decode(generated_tokens.detach().cpu().tolist(), src=False)
@@ -182,6 +187,22 @@ def translation():
     else:
         return render_template('translation.html')
 
+@app.route('/savepdf', methods=['GET','POST'])
+def savepdf():
+
+    screenshot = pyautogui.screenshot(region=(778, 335, 565, 330))
+
+    screenshot_path = 'screenshot.png'
+    screenshot.save(screenshot_path)
+
+    with open(screenshot_path, "rb") as img_file:
+        with open("output.pdf", "wb") as pdf_file:
+            pdf_file.write(img2pdf.convert(img_file))
+
+    pdf_path = 'output.pdf'
+    response = make_response(send_file(pdf_path, as_attachment=True))
+    response.headers["Content-Disposition"] = "attachment; filename=translated-text.pdf"
+    return response
 
 
 
